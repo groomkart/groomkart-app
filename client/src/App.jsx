@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// client/src/App.jsx
+import { useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:4000/api/services")
+      .then((r) => {
+        if (!r.ok) throw new Error("Network response not ok");
+        return r.json();
+      })
+      .then((data) => setServices(data))
+      .catch((e) => setErr(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div style={{padding:20}}>Loading...</div>;
+  if (err) return <div style={{padding:20,color:"red"}}>Error: {err}</div>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: 20 }}>
+      <h1>GroomKart — Services</h1>
+      <ul>
+        {services.map((s) => (
+          <li key={s.id}>
+            {s.title} — ₹{s.price}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-
-export default App
