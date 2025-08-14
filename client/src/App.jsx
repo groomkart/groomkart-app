@@ -1,35 +1,28 @@
-// client/src/App.jsx
-import { useEffect, useState } from "react";
+import React from "react";
 
 export default function App() {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState(null);
-
-  useEffect(() => {
-    fetch("http://localhost:4000/api/services")
-      .then((r) => {
-        if (!r.ok) throw new Error("Network response not ok");
-        return r.json();
-      })
-      .then((data) => setServices(data))
-      .catch((e) => setErr(e.message))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div style={{padding:20}}>Loading...</div>;
-  if (err) return <div style={{padding:20,color:"red"}}>Error: {err}</div>;
-
   return (
-    <div style={{ padding: 20 }}>
-      <h1>GroomKart — Services</h1>
-      <ul>
-        {services.map((s) => (
-          <li key={s.id}>
-            {s.title} — ₹{s.price}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <header className="header">
+        <div className="container" style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+          <div className="brand">GroomKart<span className="dot">.</span></div>
+          <button className="btn-primary">Book a Service</button>
+        </div>
+      </header>
+
+      <main className="container">
+        <div className="spacer" />
+        <span className="tag">Indigo + Peach</span>
+        <div className="spacer" />
+        <div className="card">
+          <h2 style={{marginTop:0}}>Welcome to GroomKart</h2>
+          <p className="hint">
+            This page is using your brand theme. Now start building real screens here.
+          </p>
+          <div className="spacer" />
+          <button className="btn-primary">Explore Services</button>
+        </div>
+      </main>
+    </>
   );
 }
